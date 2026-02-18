@@ -1,0 +1,291 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RD_AAOW.TemplatePage">
+
+	<StackLayout>
+
+		<ScrollView x:Name="MainField">
+			<StackLayout Orientation="Vertical">
+
+				<Label />
+
+				<Label x:Name="GenericFieldsLabel" />
+				<Label />
+
+				<Label x:Name="BlankTypeLabel" />
+				<Button x:Name="BlankTypeButton" />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="FNChangeFlag" VerticalOptions="Center" />
+					<Label x:Name="FNChangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<Label x:Name="UserNameLabel" />
+				<Editor x:Name="UserNameField" />
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="INNLabel" VerticalOptions="Center" />
+					<Editor x:Name="INNField" MinimumWidthRequest="100" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="OGRNLabel" VerticalOptions="Center" />
+					<Editor x:Name="OGRNField" MinimumWidthRequest="100" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="KPPLabel" VerticalOptions="Center" />
+					<Editor x:Name="KPPField" MinimumWidthRequest="100" VerticalOptions="Center" />
+					<Button x:Name="FindUserButton" VerticalOptions="Center" />
+				</StackLayout>
+
+				<Label x:Name="PresenterTypeLabel" />
+				<Editor x:Name="PresenterTypeField" />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="PresenterTypeFlag" VerticalOptions="Center" />
+					<Label x:Name="PresenterTypeFlagLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="UserNameChangeFlag" VerticalOptions="Center" />
+					<Label x:Name="UserNameChangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="KKTStolenFlag" VerticalOptions="Center" />
+					<Label x:Name="KKTStolenLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="KKTMissingFlag" VerticalOptions="Center" />
+					<Label x:Name="KKTMissingLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="FNBrokenFlag" VerticalOptions="Center" />
+					<Label x:Name="FNBrokenLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<Label MinimumHeightRequest="80"/>
+
+
+
+				<Label x:Name="NumberFieldsLabel" />
+				<Label />
+
+				<Label x:Name="KKTModelLabel" />
+				<Button x:Name="KKTModelButton" />
+				<Label x:Name="KKTSerialLabel" />
+				<Editor x:Name="KKTSerialField" />
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<Label x:Name="FNModelLabel" />
+				<Button x:Name="FNModelButton" />
+				<Label x:Name="FNSerialLabel" />
+				<Editor x:Name="FNSerialField" />
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<Label x:Name="OFDVariantLabel" />
+				<Button x:Name="OFDVariantButton" />
+				<Label x:Name="OFDNameLabel" />
+				<Button x:Name="OFDNameButton" />
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<Label x:Name="KKTRNMLabel" />
+				<Editor x:Name="KKTRNMField" />
+
+				<Label MinimumHeightRequest="80"/>
+
+
+
+				<Label x:Name="AddressFieldsLabel" />
+				<Label />
+
+				<Label x:Name="AddressRegionCodeLabel" />
+				<Button x:Name="AddressRegionCodeButton" />
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="AddressIndexLabel" VerticalOptions="Center" />
+					<Editor x:Name="AddressIndexField" MinimumWidthRequest="80" VerticalOptions="Center" />
+					<Button x:Name="AddressIndexFindButton" VerticalOptions="Center" />
+				</StackLayout>
+
+				<Label x:Name="AddressAreaLabel" />
+				<Editor x:Name="AddressAreaField" />
+
+				<Label x:Name="AddressCityLabel" />
+				<Editor x:Name="AddressCityField" />
+
+				<Label x:Name="AddressTownLabel" />
+				<Editor x:Name="AddressTownField" />
+
+				<Label x:Name="AddressStreetLabel" />
+				<Editor x:Name="AddressStreetField" />
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="AddressHouseLabel" VerticalOptions="Center" />
+					<Editor x:Name="AddressHouseField" VerticalOptions="Center" MinimumWidthRequest="50" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="AddressBuildingLabel" VerticalOptions="Center" />
+					<Editor x:Name="AddressBuildingField" VerticalOptions="Center" MinimumWidthRequest="50" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="AddressAppartmentLabel" VerticalOptions="Center" />
+					<Editor x:Name="AddressAppartmentField" VerticalOptions="Center" MinimumWidthRequest="50" />
+				</StackLayout>
+
+				<Label x:Name="PlaceLabel" />
+				<Editor x:Name="PlaceField" />
+
+				<Label />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="AddressPlaceChangeFlag" VerticalOptions="Center" />
+					<Label x:Name="AddressPlaceChangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<Label MinimumHeightRequest="80"/>
+
+
+
+				<Label x:Name="WorkmodeFieldsLabel" />
+				<Label />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="ExciseFlag" VerticalOptions="Center" />
+					<Label x:Name="ExciseLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="MarkFlag" VerticalOptions="Center" />
+					<Label x:Name="MarkLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="InternetFlag" VerticalOptions="Center" />
+					<Label x:Name="InternetLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="BSOFlag" VerticalOptions="Center" />
+					<Label x:Name="BSOLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="BankAgentFlag" VerticalOptions="Center" />
+					<Label x:Name="BankAgentLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="AgentFlag" VerticalOptions="Center" />
+					<Label x:Name="AgentLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="DeliveryFlag" VerticalOptions="Center" />
+					<Label x:Name="DeliveryLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="LotteryFlag" VerticalOptions="Center" />
+					<Label x:Name="LotteryLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="GamblingFlag" VerticalOptions="Center" />
+					<Label x:Name="GamblingLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="GamblingExchangeFlag" VerticalOptions="Center" />
+					<Label x:Name="GamblingExchangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="10" />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="OtherChangeFlag" VerticalOptions="Center" />
+					<Label x:Name="OtherChangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+				WidthRequest="100" Color="#505050" Margin="30" />
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="AutomatFlag" VerticalOptions="Center" />
+					<Label x:Name="AutomatLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Label x:Name="AutomatNumberLabel" VerticalOptions="Center" />
+					<Editor x:Name="AutomatNumberField" MinimumWidthRequest="100" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="AutomatAddressIsSameFlag" VerticalOptions="Center" />
+					<Label x:Name="AutomatAddressIsSameLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<StackLayout Orientation="Horizontal">
+					<Switch x:Name="AutomatChangeFlag" VerticalOptions="Center" />
+					<Label x:Name="AutomatChangeLabel" VerticalOptions="Center" />
+				</StackLayout>
+
+				<Label MinimumHeightRequest="80"/>
+
+
+
+				<Label x:Name="ReportsFieldsLabel" />
+				<Label />
+
+				<Label x:Name="FNCloseFDLabel" />
+				<Editor x:Name="FNCloseFDField" />
+
+				<Label x:Name="FNCloseDateLabel" />
+				<Button x:Name="FNCloseDateButton" />
+
+				<Label x:Name="FNCloseFPDLabel" />
+				<Editor x:Name="FNCloseFPDField" />
+
+				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
+					WidthRequest="100" Color="#505050" Margin="30" />
+
+				<Label x:Name="FNOpenFDLabel" />
+				<Editor x:Name="FNOpenFDField" />
+
+				<Label x:Name="FNOpenDateLabel" />
+				<Button x:Name="FNOpenDateButton" />
+
+				<Label x:Name="FNOpenFPDLabel" />
+				<Editor x:Name="FNOpenFPDField" />
+
+				<Label />
+
+			</StackLayout>
+		</ScrollView>
+
+		<StackLayout Orientation="Horizontal" HorizontalOptions="Center">
+			<Button x:Name="CreateBlankButton" VerticalOptions="Center"/>
+			<Button x:Name="MenuButton" VerticalOptions="Center"/>
+		</StackLayout>
+
+	</StackLayout>
+</ContentPage>

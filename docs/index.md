@@ -8,8 +8,6 @@
 - [Общие сведения об инструменте KassArrayPR (paper registration)](#kassarraypr)
 - [Ссылки для загрузки](https://adslbarxatov.github.io/DPArray/ru#kassarraypr)
 
----
-
 &nbsp;
 
 
