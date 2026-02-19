@@ -41,11 +41,13 @@ namespace RD_AAOW
 
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 
-			if (!RDGenerics.CheckLibrariesVersions (ProgramDescription.AssemblyLibraries, true))
+			/*if (!RDGenerics.CheckLibrariesVersions (ProgramDescription.AssemblyLibraries, true))
+			if (!LibraryProtocolChecker.CheckProtocolVersion (ProgramDescription.AssemblyDLLProtocol,
+				KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDBDLL))
 				{
 				closeWindowOnError = true;
 				return;
-				}
+				}*/
 
 			this.Text = RDGenerics.DefaultAssemblyVisibleName;
 
