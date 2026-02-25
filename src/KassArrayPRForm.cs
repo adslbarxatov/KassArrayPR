@@ -41,14 +41,6 @@ namespace RD_AAOW
 
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 
-			/*if (!RDGenerics.CheckLibrariesVersions (ProgramDescription.AssemblyLibraries, true))
-			if (!LibraryProtocolChecker.CheckProtocolVersion (ProgramDescription.AssemblyDLLProtocol,
-				KassArrayDB::RD_AAOW.ProgramDescription.KassArrayDBDLL))
-				{
-				closeWindowOnError = true;
-				return;
-				}*/
-
 			this.Text = RDGenerics.DefaultAssemblyVisibleName;
 
 			FNCloseDateField.MinDate = new DateTime ((int)KAPRSupport.MinimumYear, 1, 1, 0, 0, 0);
@@ -106,12 +98,32 @@ namespace RD_AAOW
 			// Подключение к прослушиванию системного события вызова окна
 			if (!RDGenerics.StartedFromMSStore)
 				{
-				try
+				/*try
 					{
 					ewh = EventWaitHandle.OpenExisting (KassArrayDB::RD_AAOW.ProgramDescription.AssemblyMainName +
 						KassArrayDB::RD_AAOW.ProgramDescription.KassArrayPRAlias);
 					}
-				catch { }
+				catch { }*/
+
+				bool ewhFailed = false;
+				try
+					{
+					ewh = EventWaitHandle.OpenExisting (ProgramDescription.AssemblyMainName);
+					}
+				catch
+					{
+					ewhFailed = true;
+					}
+				if (ewhFailed)
+					{
+					try
+						{
+						ewh = new EventWaitHandle (false, EventResetMode.AutoReset,
+							ProgramDescription.AssemblyMainName);
+						}
+					catch { }
+					}
+
 				ShowWindowTimer.Enabled = true;
 				}
 
