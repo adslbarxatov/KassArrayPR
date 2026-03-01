@@ -12,6 +12,7 @@
 				<Switch x:Name="DontAddStrikeoutsFlag" VerticalOptions="Center" />
 				<Label x:Name="DontAddStrikeoutsLabel" VerticalOptions="Center" />
 			</StackLayout>
+			<Label x:Name="DontAddStrikeoutsTip" />
 
 			<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
 					WidthRequest="100" Color="#505050" Margin="30" />
@@ -20,6 +21,7 @@
 				<Switch x:Name="AddSignDateFlag" VerticalOptions="Center" />
 				<Label x:Name="AddSignDateLabel" VerticalOptions="Center" />
 			</StackLayout>
+			<Label x:Name="AddSignDateTip" />
 
 			<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
 					WidthRequest="100" Color="#505050" Margin="30" />
@@ -28,6 +30,7 @@
 				<Switch x:Name="SwitchHeightFlag" VerticalOptions="Center" />
 				<Label x:Name="SwitchHeightLabel" VerticalOptions="Center" />
 			</StackLayout>
+			<Label x:Name="SwitchHeightTip" />
 
 			<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
 					WidthRequest="100" Color="#505050" Margin="30" />
