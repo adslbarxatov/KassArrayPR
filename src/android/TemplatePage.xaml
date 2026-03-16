@@ -256,7 +256,9 @@
 				<Label x:Name="ReportsFieldsLabel" />
 				<Label />
 
-				<Label x:Name="FNCloseFDLabel" />
+				<Label x:Name="FNCloseFDLabel1" />
+
+				<Label x:Name="FNCloseFDLabel2" />
 				<Editor x:Name="FNCloseFDField" />
 
 				<Label x:Name="FNCloseDateLabel" />
@@ -268,7 +270,9 @@
 				<BoxView VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="1" 
 					WidthRequest="100" Color="#505050" Margin="30" />
 
-				<Label x:Name="FNOpenFDLabel" />
+				<Label x:Name="FNOpenFDLabel1" />
+				
+				<Label x:Name="FNOpenFDLabel2" />
 				<Editor x:Name="FNOpenFDField" />
 
 				<Label x:Name="FNOpenDateLabel" />
