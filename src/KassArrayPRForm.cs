@@ -1,6 +1,7 @@
 ﻿extern alias KassArrayDB;
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
@@ -643,13 +644,17 @@ namespace RD_AAOW
 					OFDNameCombo.Text = ofd;
 				}
 
-			string addressFromFN = KassArrayDB::RD_AAOW.KKTSupport.GetRegTagValue
+			/*string*/
+			addressFromFN = KassArrayDB::RD_AAOW.KKTSupport.GetRegTagValue
 				(KassArrayDB::RD_AAOW.RegTags.RegistrationAddress, false);
-			string[] affn = addressFromFN.Split ([',', '.', ' '], StringSplitOptions.RemoveEmptyEntries);
+			/*string[] affn = addressFromFN.Split ([',', '.', ' '], StringSplitOptions.RemoveEmptyEntries);*/
+			
+			addressFromFNParts.Clear ();
+			addressFromFNParts.AddRange (addressFromFN.Split (affnSplitters, StringSplitOptions.RemoveEmptyEntries));
 
 			addressMenu.Items.Clear ();
-			for (int i = 0; i < affn.Length; i++)
-				addressMenu.Items.Add (affn[i], null, AddressMenu_Click);
+			for (int i = 0; i < addressFromFNParts.Count; i++)
+				addressMenu.Items.Add (addressFromFNParts[i], null, AddressMenu_Click);
 
 			if (PlaceField.Enabled)
 				PlaceField.Text = KassArrayDB::RD_AAOW.KKTSupport.GetRegTagValue
@@ -718,7 +723,88 @@ namespace RD_AAOW
 
 			RDGenerics.RunURL (KAPRSupport.AddressIndexSearchRequest +
 				AddressCityField.Text.Replace (' ', '+').ToLower ());
+			/*// Контроль наличия адреса
+			if (string.IsNullOrWhiteSpace (addressFromFN))
+				{
+				addressFromFN = AddressCityField.Text + " " + AddressTownField.Text + " " +
+					AddressStreetField.Text + " " + AddressHouseField.Text;
+				}
+
+			for (int i = 0; i < affnSplitters.Length; i++)
+				if (affnSplitters[i] != ' ')
+					addressFromFN = addressFromFN.Replace (affnSplitters[i].ToString (), "");
+
+			if (string.IsNullOrWhiteSpace (addressFromFN))
+				{
+				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.LockSmallSize | RDMessageFlags.CenterText,
+					"Нет сведений для поиска. Укажите значения в полях, помеченных розовым цветом, " +
+					"или получите регистрационные данные из ФН, после чего повторите попытку");
+				return;
+				}
+
+			RDGenerics.RunURL (KAPRSupport.AddressIndexSearchRequest + addressFromFN.Replace (' ', '+').ToLower ());*/
+			/*// Запуск извлечения
+			RDInterface.RunWork (AddressExtractor, null, "Получение адреса...", RDRunWorkFlags.CaptionInTheMiddle);
+			if (RDInterface.WorkResultAsInteger < 0)
+				{
+				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
+					"Не удалось получить адрес по указанным данным");
+				return;
+				}
+
+			// Адрес получен – обновление меню
+			addressMenu.Items.Clear ();
+			for (int i = 0; i < addressFromFNParts.Count; i++)
+				addressMenu.Items.Add (addressFromFNParts[i], null, AddressMenu_Click);*/
 			}
+
+		/*private void AddressExtractor (object sender, DoWorkEventArgs e)
+			{
+			// Запрос
+			string rq = KAPRSupport.AddressIndexSearchRequest + addressFromFN.Replace (' ', '+').ToLower ();
+			string html = RDGenerics.GetHTML (rq);
+			if (string.IsNullOrWhiteSpace (html))
+				{
+				e.Result = -1;
+				return;
+				}
+
+			// Определение границ
+			int left = html.IndexOf ("[\"https://2gis.ru");
+			if (left < 0)
+				{
+				e.Result = -2;
+				return;
+				}
+
+			left = html.IndexOf (',', left);
+			if (left < 0)
+				{
+				e.Result = -2;
+				return;
+				}
+
+			int right = html.IndexOf ("показать на карте", left, StringComparison.CurrentCultureIgnoreCase);
+			if (right < 0)
+				{
+				e.Result = -3;
+				return;
+				}
+
+			// Извлечение
+			string addr = html.Substring (left, right - left);
+			string[] values = addr.Split (affnSplitters, StringSplitOptions.RemoveEmptyEntries);
+
+			for (int i = 0; i < values.Length; i++)
+				if (!addressFromFNParts.Contains (values[i]))
+					addressFromFNParts.Add (values[i]);
+
+			// Успешно
+			e.Result = 0;
+			}*/
+		private string addressFromFN = "";
+		private List<string> addressFromFNParts = [];
+		private char[] affnSplitters = [',', '.', ' ', '\"'];
 
 		// Отображение раздела настроек
 		private void MSettings_Click (object sender, EventArgs e)
@@ -934,7 +1020,7 @@ namespace RD_AAOW
 			}
 
 		// Обработчик контекстного меню адресных полей
-		private void AddressField_MouseClick (object sender, MouseEventArgs e)
+		private void AddressField_MouseDoubleClick (object sender, MouseEventArgs e)
 			{
 			if (addressMenu.Items.Count < 1)
 				return;
