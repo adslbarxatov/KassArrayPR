@@ -37,8 +37,8 @@ namespace RD_AAOW
 			{
 			// Инициализация
 			InitializeComponent ();
-			if (RDLocale.CurrentLanguage != RDLanguages.ru_ru)
-				RDLocale.CurrentLanguage = RDLanguages.ru_ru;
+			/*if (RDLocale.CurrentLanguage != RDLanguages.ru_ru)
+				RDLocale.CurrentLanguage = RDLanguages.ru_ru;*/
 
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
 
