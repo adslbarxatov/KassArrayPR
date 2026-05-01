@@ -37,19 +37,16 @@ namespace RD_AAOW
 			{
 			// Инициализация
 			InitializeComponent ();
-			/*if (RDLocale.CurrentLanguage != RDLanguages.ru_ru)
-				RDLocale.CurrentLanguage = RDLanguages.ru_ru;*/
 
 			kb = new KassArrayDB::RD_AAOW.KnowledgeBase ();
-
 			this.Text = RDGenerics.DefaultAssemblyVisibleName;
 
-			FNCloseDateField.MinDate = new DateTime ((int)KAPRSupport.MinimumYear, 1, 1, 0, 0, 0);
-			FNCloseDateField.MaxDate = new DateTime ((int)KAPRSupport.MaximumYear, 12, 31, 0, 0, 0);
+			FNCloseDateField.MinDate = LibrarySupport.MinimumDatePickerValue;
+			FNCloseDateField.MaxDate = RDGenerics.MaximumDatePickerValue;
 			FNCloseDateField.Value = FNCloseDateField.MinDate;
 
-			FNOpenDateField.MinDate = new DateTime ((int)KAPRSupport.MinimumYear, 1, 1, 0, 0, 0);
-			FNOpenDateField.MaxDate = new DateTime ((int)KAPRSupport.MaximumYear, 12, 31, 0, 0, 0);
+			FNOpenDateField.MinDate = LibrarySupport.MinimumDatePickerValue;
+			FNOpenDateField.MaxDate = RDGenerics.MaximumDatePickerValue;
 			FNOpenDateField.Value = FNOpenDateField.MinDate;
 
 			OFDialog.Title = "Выберите файл заявления";
@@ -208,11 +205,54 @@ namespace RD_AAOW
 		// Поиск пользователя
 		private void FindUserButton_Click (object sender, EventArgs e)
 			{
-			// Попытка получения из сохранённого списка
+			// Ограничение поиска по пустым полям
 			if (kl == null)
 				kl = new KAPRList ();
 
-			string[] req = kl.FindRequisites (INNField.Text);
+			bool hasUserName = !string.IsNullOrWhiteSpace (UserNameField.Text);
+			bool hasINN = !string.IsNullOrWhiteSpace (INNField.Text);
+			if (!hasINN && !hasUserName)
+				{
+				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText | RDMessageFlags.LockSmallSize,
+					"Укажите наименование пользователя или его ИНН для выполнения поиска");
+				return;
+				}
+
+			// Определение варианта поиска
+			RDMessageButtons ans;
+			if (hasINN && !hasUserName)
+				ans = RDMessageButtons.ButtonOne;
+			else if (hasUserName && !hasINN)
+				ans = RDMessageButtons.ButtonTwo;
+			else
+				ans = RDInterface.MessageBox (RDMessageFlags.Question | RDMessageFlags.CenterText,
+					"Найти пользователя по названию или ИНН?", "ИНН", "Название",
+					RDLocale.GetDefaultText (RDLDefaultTexts.Button_Cancel));
+
+			string[] req;
+			switch (ans)
+				{
+				case RDMessageButtons.ButtonOne:
+					req = kl.FindRequisites (INNField.Text, true);
+					break;
+
+				case RDMessageButtons.ButtonTwo:
+					req = kl.FindRequisites (UserNameField.Text, false);
+					break;
+
+				case RDMessageButtons.ButtonThree:
+				default:
+					return;
+				}
+
+			// Обработка краевых условий
+			if (!hasINN && (req == null))
+				{
+				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText | RDMessageFlags.LockSmallSize,
+					"Не удалось найти пользователя по названию. Укажите его ИНН и повторите попытку");
+				return;
+				}
+
 			if (req == null)
 				{
 				// Поиск в ЕГРЮЛ
@@ -229,6 +269,9 @@ namespace RD_AAOW
 				KPPField.Text = req[2];
 				PresenterTypeField.Text = req[3];
 				PresenterTypeFlag.Checked = (req[4] == "1");
+
+				if (!hasINN)
+					INNField.Text = req[5];
 				}
 			}
 
@@ -644,11 +687,9 @@ namespace RD_AAOW
 					OFDNameCombo.Text = ofd;
 				}
 
-			/*string*/
 			addressFromFN = KassArrayDB::RD_AAOW.KKTSupport.GetRegTagValue
 				(KassArrayDB::RD_AAOW.RegTags.RegistrationAddress, false);
-			/*string[] affn = addressFromFN.Split ([',', '.', ' '], StringSplitOptions.RemoveEmptyEntries);*/
-			
+
 			addressFromFNParts.Clear ();
 			addressFromFNParts.AddRange (addressFromFN.Split (affnSplitters, StringSplitOptions.RemoveEmptyEntries));
 
@@ -698,6 +739,21 @@ namespace RD_AAOW
 				"не все данные)" + RDLocale.RN +
 				"• Запрос данных из ФН приводит к замене ранее введённых данных в соответствующих полях";
 			RDInterface.MessageBox (RDMessageFlags.Question | RDMessageFlags.NoSound, res);
+
+			// Попытка поиска остальных реквизитов пользователя по ИНН (скорее всего, нет вариантов,
+			// при которых ИНН к этому моменту будет пустым)
+			if (kl == null)
+				kl = new KAPRList ();
+
+			string[] req = kl.FindRequisites (INNField.Text, true);
+			if (req != null)
+				{
+				UserNameField.Text = req[0];
+				OGRNField.Text = req[1];
+				KPPField.Text = req[2];
+				PresenterTypeField.Text = req[3];
+				PresenterTypeFlag.Checked = (req[4] == "1");
+				}
 			}
 
 		// Поиск почтового индекса
@@ -723,85 +779,8 @@ namespace RD_AAOW
 
 			RDGenerics.RunURL (KAPRSupport.AddressIndexSearchRequest +
 				AddressCityField.Text.Replace (' ', '+').ToLower ());
-			/*// Контроль наличия адреса
-			if (string.IsNullOrWhiteSpace (addressFromFN))
-				{
-				addressFromFN = AddressCityField.Text + " " + AddressTownField.Text + " " +
-					AddressStreetField.Text + " " + AddressHouseField.Text;
-				}
-
-			for (int i = 0; i < affnSplitters.Length; i++)
-				if (affnSplitters[i] != ' ')
-					addressFromFN = addressFromFN.Replace (affnSplitters[i].ToString (), "");
-
-			if (string.IsNullOrWhiteSpace (addressFromFN))
-				{
-				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.LockSmallSize | RDMessageFlags.CenterText,
-					"Нет сведений для поиска. Укажите значения в полях, помеченных розовым цветом, " +
-					"или получите регистрационные данные из ФН, после чего повторите попытку");
-				return;
-				}
-
-			RDGenerics.RunURL (KAPRSupport.AddressIndexSearchRequest + addressFromFN.Replace (' ', '+').ToLower ());*/
-			/*// Запуск извлечения
-			RDInterface.RunWork (AddressExtractor, null, "Получение адреса...", RDRunWorkFlags.CaptionInTheMiddle);
-			if (RDInterface.WorkResultAsInteger < 0)
-				{
-				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
-					"Не удалось получить адрес по указанным данным");
-				return;
-				}
-
-			// Адрес получен – обновление меню
-			addressMenu.Items.Clear ();
-			for (int i = 0; i < addressFromFNParts.Count; i++)
-				addressMenu.Items.Add (addressFromFNParts[i], null, AddressMenu_Click);*/
 			}
 
-		/*private void AddressExtractor (object sender, DoWorkEventArgs e)
-			{
-			// Запрос
-			string rq = KAPRSupport.AddressIndexSearchRequest + addressFromFN.Replace (' ', '+').ToLower ();
-			string html = RDGenerics.GetHTML (rq);
-			if (string.IsNullOrWhiteSpace (html))
-				{
-				e.Result = -1;
-				return;
-				}
-
-			// Определение границ
-			int left = html.IndexOf ("[\"https://2gis.ru");
-			if (left < 0)
-				{
-				e.Result = -2;
-				return;
-				}
-
-			left = html.IndexOf (',', left);
-			if (left < 0)
-				{
-				e.Result = -2;
-				return;
-				}
-
-			int right = html.IndexOf ("показать на карте", left, StringComparison.CurrentCultureIgnoreCase);
-			if (right < 0)
-				{
-				e.Result = -3;
-				return;
-				}
-
-			// Извлечение
-			string addr = html.Substring (left, right - left);
-			string[] values = addr.Split (affnSplitters, StringSplitOptions.RemoveEmptyEntries);
-
-			for (int i = 0; i < values.Length; i++)
-				if (!addressFromFNParts.Contains (values[i]))
-					addressFromFNParts.Add (values[i]);
-
-			// Успешно
-			e.Result = 0;
-			}*/
 		private string addressFromFN = "";
 		private List<string> addressFromFNParts = [];
 		private char[] affnSplitters = [',', '.', ' ', '\"'];
@@ -1035,6 +1014,7 @@ namespace RD_AAOW
 		private void AddressMenu_Click (object sender, EventArgs e)
 			{
 			addressField.Text = ((ToolStripItem)sender).Text;
+			RDInterface.SetFocusToTextbox (addressField);
 			}
 		}
 	}
