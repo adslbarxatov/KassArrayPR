@@ -26,8 +26,8 @@ namespace RD_AAOW
 		// Ресивер сообщений на повторное открытие окна
 		private EventWaitHandle ewh;
 
-		// Список сохранённых реквизитов
-		private KAPRList kl;
+		/*// Список сохранённых реквизитов
+		private KAPRList kl;*/
 
 		/// <summary>
 		/// Конструктор. Запускает главную форму
@@ -206,8 +206,8 @@ namespace RD_AAOW
 		private void FindUserButton_Click (object sender, EventArgs e)
 			{
 			// Ограничение поиска по пустым полям
-			if (kl == null)
-				kl = new KAPRList ();
+			/*if (kl == null)
+				kl = new KAPRList ();*/
 
 			bool hasUserName = !string.IsNullOrWhiteSpace (UserNameField.Text);
 			bool hasINN = !string.IsNullOrWhiteSpace (INNField.Text);
@@ -229,31 +229,39 @@ namespace RD_AAOW
 					"Найти пользователя по названию или ИНН?", "ИНН", "Название",
 					RDLocale.GetDefaultText (RDLDefaultTexts.Button_Cancel));
 
-			string[] req;
+			/*string[] req;*/
+			KAPRList kl = new KAPRList ();
+			KAPRFoundRequisites? v;
 			switch (ans)
 				{
 				case RDMessageButtons.ButtonOne:
-					req = kl.FindRequisites (INNField.Text, true);
+					/*req = kl.FindRequisites (INNField.Text, true);*/
+					v = kl.FindRequisites (INNField.Text, true);
 					break;
 
 				case RDMessageButtons.ButtonTwo:
-					req = kl.FindRequisites (UserNameField.Text, false);
+					/*req = kl.FindRequisites (UserNameField.Text, false);*/
+					v = kl.FindRequisites (UserNameField.Text, false);
 					break;
 
 				case RDMessageButtons.ButtonThree:
 				default:
+					kl.Dispose ();
 					return;
 				}
 
 			// Обработка краевых условий
-			if (!hasINN && (req == null))
+			/*if (!hasINN && (req == null))*/
+			if (!hasINN && (v == null))
 				{
 				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText | RDMessageFlags.LockSmallSize,
 					"Не удалось найти пользователя по названию. Укажите его ИНН и повторите попытку");
+				kl.Dispose ();
 				return;
 				}
 
-			if (req == null)
+			/*if (req == null)*/
+			if (v == null)
 				{
 				// Поиск в ЕГРЮЛ
 				RDInterface.MessageBox (RDMessageFlags.Success | RDMessageFlags.CenterText | RDMessageFlags.NoSound,
@@ -264,15 +272,25 @@ namespace RD_AAOW
 			else
 				{
 				// Подгрузка из списка
-				UserNameField.Text = req[0];
+				KAPRFoundRequisites fr = v.Value;
+				/*UserNameField.Text = req[0];
 				OGRNField.Text = req[1];
 				KPPField.Text = req[2];
 				PresenterTypeField.Text = req[3];
-				PresenterTypeFlag.Checked = (req[4] == "1");
+				PresenterTypeFlag.Checked = (req[4] == "1");*/
+				UserNameField.Text = fr.UserName;
+				OGRNField.Text = fr.OGRN;
+				KPPField.Text = fr.KPP;
+				PresenterTypeField.Text = fr.Member;
+				PresenterTypeFlag.Checked = fr.ByProxy;
 
+				/*if (!hasINN)
+					INNField.Text = req[5];*/
 				if (!hasINN)
-					INNField.Text = req[5];
+					INNField.Text = fr.INN;
 				}
+
+			kl.Dispose ();
 			}
 
 		// Ввод ЗН ККТ
@@ -450,9 +468,9 @@ namespace RD_AAOW
 		/// </summary>
 		private void CreateBlank_Click (object sender, EventArgs e)
 			{
-			// Запрос настроек, если указано
+			/*// Запрос настроек, если указано
 			if (KAPRSupport.AskSettingsEveryTime)
-				_ = new KassArrayPRSettings ();
+				_ = new KassArrayPRSettings ();*/
 
 			// Сохранение копии, если указано
 			if (!string.IsNullOrWhiteSpace (KAPRSupport.BackupsPath))
@@ -501,15 +519,18 @@ namespace RD_AAOW
 			// Формирование заявления
 			string template = KAPRSupport.BuildTemplate (kb);
 
-			// Сохранение реквизитов, если предусмотрено
+			/*// Сохранение реквизитов, если предусмотрено
 			if (KAPRSupport.SaveUserRequisites)
 				{
 				if (kl == null)
-					kl = new KAPRList ();
+					kl = new KAPRList ();*/
 
-				kl.AddRequisites (INNField.Text, UserNameField.Text, OGRNField.Text,
-					KPPField.Text, PresenterTypeField.Text, PresenterTypeFlag.Checked);
-				}
+			// Сохранение реквизитов
+			KAPRList kl = new KAPRList ();
+			kl.AddRequisites (INNField.Text, UserNameField.Text, OGRNField.Text,
+				KPPField.Text, PresenterTypeField.Text, PresenterTypeFlag.Checked);
+			kl.Dispose ();
+			/*}*/
 
 			// Запуск на печать
 			string res = KassArrayDB::RD_AAOW.KKTSupport.PrintText (template,
@@ -742,18 +763,32 @@ namespace RD_AAOW
 
 			// Попытка поиска остальных реквизитов пользователя по ИНН (скорее всего, нет вариантов,
 			// при которых ИНН к этому моменту будет пустым)
-			if (kl == null)
+			/*if (kl == null)
 				kl = new KAPRList ();
 
-			string[] req = kl.FindRequisites (INNField.Text, true);
-			if (req != null)
+			string[] req = kl.FindRequisites (INNField.Text, true);*/
+			KAPRList kl = new KAPRList ();
+			KAPRFoundRequisites? v = kl.FindRequisites (INNField.Text, true);
+
+			/*if (req != null)
 				{
 				UserNameField.Text = req[0];
 				OGRNField.Text = req[1];
 				KPPField.Text = req[2];
 				PresenterTypeField.Text = req[3];
 				PresenterTypeFlag.Checked = (req[4] == "1");
+				}*/
+			if (v != null)
+				{
+				KAPRFoundRequisites fr = v.Value;
+				UserNameField.Text = fr.UserName;
+				OGRNField.Text = fr.OGRN;
+				KPPField.Text = fr.KPP;
+				PresenterTypeField.Text = fr.Member;
+				PresenterTypeFlag.Checked = fr.ByProxy;
 				}
+
+			kl.Dispose ();
 			}
 
 		// Поиск почтового индекса
