@@ -520,14 +520,14 @@ namespace RD_AAOW
 				"со строкой подписи пользователя ККТ. Однако в некоторых случаях это может ускорить процесс " +
 				"оформления документов", RDLabelTypes.TipJustify);
 
-			RDInterface.ApplyLabelSettings (settingsPage, "SwitchHeightLabel",
+			/*RDInterface.ApplyLabelSettings (settingsPage, "SwitchHeightLabel",
 				"Прижать панель кнопок к низу экрана\n(раздвинуть область прокрутки)", RDLabelTypes.DefaultLeft);
 			switchHeightFlag = RDInterface.ApplySwitchSettings (settingsPage, "SwitchHeightFlag", false,
 				settingsFieldBackColor, SwitchHeightFlag_Toggled, KAPRSupport.AdditionalHeight != 0);
 			RDInterface.ApplyLabelSettings (settingsPage, "SwitchHeightTip",
 				"На некоторых устройствах расположение системной панели «Назад-Свернуть-Перейти» позволяет " +
 				"немного увеличить область прокрутки полей заявления в интерфейсе приложения. Не включайте эту " +
-				"функцию, если кнопка «Сформировать» плотно прилегает к этой панели", RDLabelTypes.TipJustify);
+				"функцию, если кнопка «Сформировать» плотно прилегает к этой панели", RDLabelTypes.TipJustify);*/
 
 			RDInterface.ApplyLabelSettings (settingsPage, "RestartTipLabel",
 				RDLocale.GetDefaultText (RDLDefaultTexts.Message_RestartRequired),
@@ -585,10 +585,10 @@ namespace RD_AAOW
 				await RDInterface.XPUNLoop ();
 
 			// Политика
+			await RDInterface.PolicyLoop ();
+
 			if (RDGenerics.TipsState != 0)
 				return;
-
-			await RDInterface.PolicyLoop ();
 
 			// Только после принятия
 			await RDInterface.ShowMessage ("Вас приветствует " + ProgramDescription.AssemblyMainName +
@@ -615,6 +615,8 @@ namespace RD_AAOW
 				"лицам и не агрегирует их. Все введённые данные остаются на устройстве пользователя и в " +
 				"сформированном бланке заявления",
 				RDLocale.GetDefaultText (RDLDefaultTexts.Button_OK));
+
+			RDGenerics.TipsState = 0x0001;
 			}
 
 		/// <summary>
@@ -751,8 +753,10 @@ namespace RD_AAOW
 			{
 			await Task.Delay (500);
 
-			mainField.HeightRequest = mainField.MaximumHeightRequest = templatePage.Height -
-				2.5 * createBlankButton.Height + KAPRSupport.AdditionalHeight;
+			/*mainField.HeightRequest = mainField.MaximumHeightRequest = templatePage.Height -
+				2.5 * createBlankButton.Height + KAPRSupport.AdditionalHeight;*/
+			double height = RDInterface.MasterPage.CurrentPage.Height - RDGenerics.NavigationBarsSize;
+			mainField.HeightRequest = mainField.MaximumHeightRequest = height - createBlankButton.Height;
 			}
 
 		// Этот вызов необходим для корректной разметки страницы журнала, когда первой отображается страница настроек
@@ -1607,7 +1611,7 @@ namespace RD_AAOW
 			KAPRSupport.AddSignDate = addSignDateFlag.IsToggled;
 			}
 
-		// Переключение ограничителя высоты журнала
+		/*// Переключение ограничителя высоты журнала
 		private async void SwitchHeightFlag_Toggled (object sender, EventArgs e)
 			{
 			if (KAPRSupport.AdditionalHeight != 0)
@@ -1616,7 +1620,7 @@ namespace RD_AAOW
 				KAPRSupport.AdditionalHeight = (uint)createBlankButton.Height;
 
 			Current_MainDisplayInfoChanged (null, null);
-			}
+			}*/
 
 		#endregion
 		}
