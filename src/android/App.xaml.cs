@@ -87,6 +87,9 @@ namespace RD_AAOW
 		private DateTime fnOpenDate = LibrarySupport.MinimumDatePickerValue;
 		private static char[] dateSplitters = [' ', '/', '.', ',', ':', '-'];
 
+		// Параметры запуска приложения
+		private RDAppStartupFlags flags;
+
 		#endregion
 
 		#region Запуск и настройка
@@ -110,7 +113,8 @@ namespace RD_AAOW
 		private Page AppShell ()
 			{
 			Page mainPage = new MasterPage ();
-			RDAppStartupFlags flags = RDGenerics.GetAppStartupFlags (RDAppStartupFlags.DisableXPUN);
+			flags = RDGenerics.GetAppStartupFlags (RDAppStartupFlags.DisableXPUN | RDAppStartupFlags.CanReadFiles |
+				RDAppStartupFlags.CanWriteFiles);
 
 			kb = new KnowledgeBase ();
 
@@ -1519,6 +1523,17 @@ namespace RD_AAOW
 				{
 				// Загрузка файла
 				case 0:
+					if (!flags.HasFlag (RDAppStartupFlags.CanReadFiles))
+						{
+						if (await RDInterface.ShowMessage (
+							RDLocale.GetDefaultText (RDLDefaultTexts.Message_ReadWritePermission) + "." +
+							RDLocale.RNRN + RDLocale.GetDefaultText (RDLDefaultTexts.Message_GoToPermissions),
+							RDLocale.GetDefaultText (RDLDefaultTexts.Button_Yes),
+							RDLocale.GetDefaultText (RDLDefaultTexts.Button_No)))
+							RDInterface.CallAppSettings ();
+						return;
+						}
+
 					string inFile = await RDGenerics.LoadFromFile (RDEncodings.UTF8);
 					if (string.IsNullOrWhiteSpace (inFile))
 						return;
@@ -1541,6 +1556,17 @@ namespace RD_AAOW
 
 				// Сохранение файла
 				case 1:
+					if (!flags.HasFlag (RDAppStartupFlags.CanWriteFiles))
+						{
+						if (await RDInterface.ShowMessage (
+							RDLocale.GetDefaultText (RDLDefaultTexts.Message_ReadWritePermission) + "." +
+							RDLocale.RNRN + RDLocale.GetDefaultText (RDLDefaultTexts.Message_GoToPermissions),
+							RDLocale.GetDefaultText (RDLDefaultTexts.Button_Yes),
+							RDLocale.GetDefaultText (RDLDefaultTexts.Button_No)))
+							RDInterface.CallAppSettings ();
+						return;
+						}
+
 					FlushFields ();
 					string outFile = KAPRSupport.BuildFile ();
 
