@@ -46,8 +46,6 @@ namespace RD_AAOW
 			FNOpenDateField.MaxDate = RDGenerics.MaximumDatePickerValue;
 			FNOpenDateField.Value = FNOpenDateField.MinDate;
 
-			/*OFDialog. Title = "Выберите файл заявления";
-			SFDialog. Title = "Укажите расположение для файла заявления";*/
 			OFDialog.Filter = SFDialog.Filter = "Файлы заявлений " + ProgramDescription.AssemblyMainName + " для ФНС (*" +
 				KAPRSupport.BlankFileExtension + ")|*" + KAPRSupport.BlankFileExtension;
 

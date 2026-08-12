@@ -45,7 +45,7 @@ namespace RD_AAOW
 			internetFlag, bsoFlag, bankAgentFlag, agentFlag, deliveryFlag, lotteryFlag,
 			gamblingFlag, gamblingExchangeFlag, otherChangeFlag, automatFlag,
 			automatAddressIsSameFlag, automatChangeFlag, dontAddStrikeoutsFlag,
-			addSignDateFlag, switchHeightFlag;
+			addSignDateFlag/*, switchHeightFlag*/;
 
 		private Label fontSizeField, kktStolenLabel, kktMissingLabel, fnBrokenLabel,
 			userNameChangeLabel, fnChangeLabel, kktRNMLabel, addressPlaceChangeLabel,
@@ -524,15 +524,6 @@ namespace RD_AAOW
 				"со строкой подписи пользователя ККТ. Однако в некоторых случаях это может ускорить процесс " +
 				"оформления документов", RDLabelTypes.TipJustify);
 
-			/*RDInterface.ApplyLabelSettings (settingsPage, "SwitchHeightLabel",
-				"Прижать панель кнопок к низу экрана\n(раздвинуть область прокрутки)", RDLabelTypes.DefaultLeft);
-			switchHeightFlag = RDInterface.ApplySwitchSettings (settingsPage, "SwitchHeightFlag", false,
-				settingsFieldBackColor, SwitchHeightFlag_Toggled, KAPRSupport.AdditionalHeight != 0);
-			RDInterface.ApplyLabelSettings (settingsPage, "SwitchHeightTip",
-				"На некоторых устройствах расположение системной панели «Назад-Свернуть-Перейти» позволяет " +
-				"немного увеличить область прокрутки полей заявления в интерфейсе приложения. Не включайте эту " +
-				"функцию, если кнопка «Сформировать» плотно прилегает к этой панели", RDLabelTypes.TipJustify);*/
-
 			RDInterface.ApplyLabelSettings (settingsPage, "RestartTipLabel",
 				RDLocale.GetDefaultText (RDLDefaultTexts.Message_RestartRequired),
 				RDLabelTypes.TipCenter);
@@ -757,8 +748,6 @@ namespace RD_AAOW
 			{
 			await Task.Delay (500);
 
-			/*mainField.HeightRequest = mainField.MaximumHeightRequest = templatePage.Height -
-				2.5 * createBlankButton.Height + KAPRSupport.AdditionalHeight;*/
 			double height = RDInterface.MasterPage.CurrentPage.Height - RDGenerics.NavigationBarsSize;
 			mainField.HeightRequest = mainField.MaximumHeightRequest = height - createBlankButton.Height;
 			}
@@ -1636,17 +1625,6 @@ namespace RD_AAOW
 			{
 			KAPRSupport.AddSignDate = addSignDateFlag.IsToggled;
 			}
-
-		/*// Переключение ограничителя высоты журнала
-		private async void SwitchHeightFlag_Toggled (object sender, EventArgs e)
-			{
-			if (KAPRSupport.AdditionalHeight != 0)
-				KAPRSupport.AdditionalHeight = 0;
-			else
-				KAPRSupport.AdditionalHeight = (uint)createBlankButton.Height;
-
-			Current_MainDisplayInfoChanged (null, null);
-			}*/
 
 		#endregion
 		}
