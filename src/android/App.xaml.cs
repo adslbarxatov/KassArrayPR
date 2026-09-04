@@ -45,7 +45,7 @@ namespace RD_AAOW
 			internetFlag, bsoFlag, bankAgentFlag, agentFlag, deliveryFlag, lotteryFlag,
 			gamblingFlag, gamblingExchangeFlag, otherChangeFlag, automatFlag,
 			automatAddressIsSameFlag, automatChangeFlag, dontAddStrikeoutsFlag,
-			addSignDateFlag/*, switchHeightFlag*/;
+			addSignDateFlag;
 
 		private Label fontSizeField, kktStolenLabel, kktMissingLabel, fnBrokenLabel,
 			userNameChangeLabel, fnChangeLabel, kktRNMLabel, addressPlaceChangeLabel,
