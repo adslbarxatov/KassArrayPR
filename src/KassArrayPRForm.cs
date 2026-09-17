@@ -1016,7 +1016,7 @@ namespace RD_AAOW
 
 		private void AddressMenu_Click (object sender, EventArgs e)
 			{
-			addressField.Text = ((ToolStripItem)sender).Text;
+			addressField.Text += " " + ((ToolStripItem)sender).Text;
 			RDInterface.SetFocusToTextbox (addressField);
 			}
 		}
