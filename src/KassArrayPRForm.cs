@@ -508,8 +508,12 @@ namespace RD_AAOW
 
 			// Сохранение реквизитов
 			KAPRList kl = new KAPRList ();
+			
 			kl.AddRequisites (INNField.Text, UserNameField.Text, OGRNField.Text,
 				KPPField.Text, PresenterTypeField.Text, PresenterTypeFlag.Checked);
+			kl.AddArea (AddressCityField.Text, AddressTownField.Text, AddressIndexField.Text,
+				AddressAreaField.Text);
+
 			kl.Dispose ();
 
 			// Запуск на печать
@@ -744,8 +748,35 @@ namespace RD_AAOW
 			// Попытка поиска остальных реквизитов пользователя по ИНН (скорее всего, нет вариантов,
 			// при которых ИНН к этому моменту будет пустым)
 			KAPRList kl = new KAPRList ();
-			KAPRFoundRequisites? v = kl.FindRequisites (INNField.Text, true);
 
+			// Обнаружение района по населённому пункту или городу
+			for (int i = 0; i < addressFromFNParts.Count; i++)
+				{
+				bool asTown;
+				string postIndex;
+				string s = kl.FindArea (addressFromFNParts[i], out asTown, out postIndex);
+
+				if (!string.IsNullOrWhiteSpace (s))
+					{
+					AddressAreaField.Text = s;
+					if (asTown)
+						{
+						AddressCityField.Text = "";
+						AddressTownField.Text = addressFromFNParts[i];
+						}
+					else
+						{
+						AddressCityField.Text = addressFromFNParts[i];
+						AddressTownField.Text = "";
+						}
+					AddressIndexField.Text = postIndex;
+
+					break;
+					}
+				}
+
+			// Обнаружение реквизитов пользователя
+			KAPRFoundRequisites? v = kl.FindRequisites (INNField.Text, true);
 			if (v != null)
 				{
 				KAPRFoundRequisites fr = v.Value;
