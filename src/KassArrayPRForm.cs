@@ -511,8 +511,10 @@ namespace RD_AAOW
 			
 			kl.AddRequisites (INNField.Text, UserNameField.Text, OGRNField.Text,
 				KPPField.Text, PresenterTypeField.Text, PresenterTypeFlag.Checked);
-			kl.AddArea (AddressCityField.Text, AddressTownField.Text, AddressIndexField.Text,
-				AddressAreaField.Text);
+
+			if (AddressAreaField.Enabled)
+				kl.AddArea (AddressCityField.Text, AddressTownField.Text, AddressIndexField.Text,
+					(byte)AddressRegionCodeCombo.SelectedIndex, AddressAreaField.Text);
 
 			kl.Dispose ();
 
@@ -752,28 +754,43 @@ namespace RD_AAOW
 			// Обнаружение района по населённому пункту или городу
 			for (int i = 0; i < addressFromFNParts.Count; i++)
 				{
-				bool asTown;
-				string postIndex;
-				string s = kl.FindArea (addressFromFNParts[i], out asTown, out postIndex);
-
-				if (!string.IsNullOrWhiteSpace (s))
-					{
-					AddressAreaField.Text = s;
-					if (asTown)
-						{
-						AddressCityField.Text = "";
-						AddressTownField.Text = addressFromFNParts[i];
-						}
-					else
-						{
-						AddressCityField.Text = addressFromFNParts[i];
-						AddressTownField.Text = "";
-						}
-					AddressIndexField.Text = postIndex;
-
+				// Не используется в других типах заявлений
+				if (!AddressAreaField.Enabled)
 					break;
+
+				/*bool asTown;
+				string postIndex;
+				string s = kl.FindArea (addressFromFNParts[i], out asTown, out postIndex);*/
+				KAPRFoundArea? foundArea = kl.FindArea (addressFromFNParts[i]);
+				if (foundArea == null)
+					continue;
+
+				/*if (!string.IsNullOrWhiteSpace (s))
+					{*/
+				KAPRFoundArea area = foundArea.Value;
+
+				if (area.HasArea)
+					AddressAreaField.Text = area.Area;
+
+				if (area.AsTown)
+					{
+					AddressCityField.Text = "";
+					AddressTownField.Text = addressFromFNParts[i];
 					}
+				else
+					{
+					AddressCityField.Text = addressFromFNParts[i];
+					AddressTownField.Text = "";
+					}
+
+				AddressIndexField.Text = area.PostIndex;
+
+				if (area.HasRegion)
+					AddressRegionCodeCombo.SelectedIndex = area.Region;
+
+				break;
 				}
+				/*}*/
 
 			// Обнаружение реквизитов пользователя
 			KAPRFoundRequisites? v = kl.FindRequisites (INNField.Text, true);
@@ -860,7 +877,7 @@ namespace RD_AAOW
 			else
 				file = RDGenerics.GetEncoding (RDEncodings.CP1251).GetString (data);
 
-			if (!KAPRSupport.ParseFile (file, kb))
+			if (!KAPRSupport.ParseFile (file/*, kb*/))
 				{
 				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
 					"Указанный файл повреждён или не является поддерживаемым файлом заявления");
