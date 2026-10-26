@@ -758,17 +758,11 @@ namespace RD_AAOW
 				if (!AddressAreaField.Enabled)
 					break;
 
-				/*bool asTown;
-				string postIndex;
-				string s = kl.FindArea (addressFromFNParts[i], out asTown, out postIndex);*/
 				KAPRFoundArea? foundArea = kl.FindArea (addressFromFNParts[i]);
 				if (foundArea == null)
 					continue;
 
-				/*if (!string.IsNullOrWhiteSpace (s))
-					{*/
 				KAPRFoundArea area = foundArea.Value;
-
 				if (area.HasArea)
 					AddressAreaField.Text = area.Area;
 
@@ -790,7 +784,6 @@ namespace RD_AAOW
 
 				break;
 				}
-				/*}*/
 
 			// Обнаружение реквизитов пользователя
 			KAPRFoundRequisites? v = kl.FindRequisites (INNField.Text, true);
@@ -877,7 +870,7 @@ namespace RD_AAOW
 			else
 				file = RDGenerics.GetEncoding (RDEncodings.CP1251).GetString (data);
 
-			if (!KAPRSupport.ParseFile (file/*, kb*/))
+			if (!KAPRSupport.ParseFile (file))
 				{
 				RDInterface.MessageBox (RDMessageFlags.Warning | RDMessageFlags.CenterText,
 					"Указанный файл повреждён или не является поддерживаемым файлом заявления");

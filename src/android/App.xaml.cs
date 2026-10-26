@@ -1319,7 +1319,7 @@ namespace RD_AAOW
 		private void FlushFields ()
 			{
 			// 13 + 5 + 2 + 11 + 15 + 6 = 52
-			KAPRSupport.SetField (KBFFields.FileVersion, (uint)KBFVersions.Actual);
+			KAPRSupport.SetField (KBFFields.FileVersion, (uint)RDFormatSignatures.KBFActual);
 			KAPRSupport.SetField (KBFFields.BlankType, (uint)blankType);
 			KAPRSupport.SetField (KBFFields.FNChangeFlag, fnChangeFlag.IsToggled);
 			KAPRSupport.SetField (KBFFields.UserName, userNameField.Text);
